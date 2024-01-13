@@ -25,7 +25,7 @@ from functools import wraps
 
 
 try:
-    descope_client = DescopeClient(project_id="P2QCGhyesv6kk1BL2RGvh063o2gF") # initialize the descope client
+    descope_client = DescopeClient(project_id="replace") # initialize the descope client
 except Exception as error:
     print ("failed to initialize. Error:")
     print (error)
@@ -35,8 +35,8 @@ app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'Ty$0mUchp0w3rUp'
-app.secret_key = "Ty$0mUchp0w3rUp"
+app.config['SECRET_KEY'] = 'something'
+app.secret_key = "something"
 app.config['SESSION_TYPE'] = 'sqlalchemy'
 db = SQLAlchemy(app)
 app.config['SESSION_SQLALCHEMY'] = db
@@ -53,7 +53,7 @@ Session(app)
 
 
 
-GOOGLE_CLIENT_ID = "498590132356-nja2j6psf36pvn83r1f79svart8ci13t.apps.googleusercontent.com"
+GOOGLE_CLIENT_ID = "something.apps.googleusercontent.com"
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # Remove in Production, domain needs https
