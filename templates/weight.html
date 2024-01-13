@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/assets/weight.css">
+    <script src="https://kit.fontawesome.com/a30f9b8509.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://unpkg.com/@descope/web-component@latest/dist/index.js"></script>
+    <script src="https://unpkg.com/@descope/web-js-sdk@1.3.3/dist/index.umd.js"></script>
+    <link 
+  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" 
+  rel="stylesheet"  type='text/css'>
+    <title>Tysofit - Dumbell weight</title>
+</head>
+<body id="body">
+  <script src="{{url_for('static', filename='descope.js')}}"></script>
+  <script>
+
+
+      if (sessionToken) {
+          getProfile()
+      } else if (validRefreshToken && !sessionToken) {
+          sdk.refresh()
+      } else {
+          window.location.href = "/login"
+      }
+
+      
+      async function getProfile() {
+          const profile = await sdk.me()
+          userName.innerHTML = profile.data.name
+          userEmail.innerHTML = profile.data.email
+      }
+
+
+      async function logout() {
+          await sdk.logout()
+          window.location.href = "/login"
+      }
+  </script>
+      <div class="header">
+        <a href="/"><img src="static/assets/logo.png" alt="TYSO" width="50"></a>
+        <nav>
+            <!-- <a href="#">Insights</a> -->
+            <a href="/progress">Progress</a>
+            <!-- <a href="#">Settings</a> -->
+            <a id="premium" href="https://www.buymeacoffee.com/tyso">Donate</a>
+            <a style="color: #ff4433" class="link logout" href="javascript:logout();">Logout</a>
+        </nav>
+    </div>
+    <div style="display: flex; justify-content: center;">
+          <h1 style="color: white; position: absolute; text-align: center; margin-top: 3%;">One last step...</h1>
+      </div>
+      
+      
+      
+    
+    <div class="container">  
+        <form id="contact" action="" method="post">
+            <p style="color: white;" id="output"></p>
+          <h3>Input the weight of the equipment used for the exercises that require it.</h3>
+          <h4>In pounds (lbs)</h4>
+          <div id="input-fields">
+           
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <a href="/startworkout" style="color: white; font-size: 20px;"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="next-button-container">
+              <a href="javascript:runPyScript()" id="nextButton" class="premium-button" style="display: block; text-decoration: none;">Start</a>
+            </div>
+          </div>
+          
+          
+        
+        </form>
+        <p style="text-align: center; color: white; font-size: 20px;">Watch this video to understand how to use the app!</p>
+        <p>insert vid here</p>
+       
+        
+      </div>
+
+        <br><br>
+
+
+        <script>
+            window.onload = function() {
+              var url = document.location.href;
+              var params = url.split('?')[1].split('&');
+              var data = {};
+              for (var i = 0; i < params.length; i++) {
+                var tmp = params[i].split('=');
+                data[tmp[0]] = decodeURIComponent(tmp[1]);
+              }
+              console.log(data.name);
+              document.getElementById("output").innerHTML = data.name;
+               // Split the output string into an array
+            var exercises = data.name.split(":")[1].trim().split(",");
+            var inputFields = "";
+
+            // Loop through the array and create input fields with unique IDs
+            for (var i = 0; i < exercises.length; i++) {
+                var exercise = exercises[i].trim();
+                inputFields += '<fieldset><input placeholder="' + exercise + '" type="text" tabindex="' + (i+1) + '" required id="exercise-' + i + '" maxlength="4" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))"></fieldset>';
+            }
+            // Add the input fields to the div
+            document.getElementById("input-fields").innerHTML = inputFields;
+            };
+          </script>
+          
+
+        
+
+    <script type=text/javascript>
+    function runPyScript(){
+      const startTime = Date.now();
+      localStorage.setItem('startTime', startTime);
+      var output2 = document.getElementById("output").textContent;
+      var exercises = output2.split(":")[1].trim().split(",");
+      var firstExercise = exercises[0].trim().replace(/ /g, ""); // Remove spaces from exercise name
+      var url = '/' + firstExercise.toLowerCase() + "?name=" + encodeURIComponent(output2); // Convert exercise name to lower case and add "/" at the beginning
+      window.location.href = url;
+    }
+
+
+
+        $('#start').click(function(){
+            datatosend = 'this is my matrix';
+            result = runPyScript(datatosend);
+            console.log('Got back ' + result);
+        });
+    </script>
+    
+
+</body>
+</html>

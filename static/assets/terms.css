@@ -1,0 +1,48 @@
+@import url(//fonts.googleapis.com/css?family=Lato:300:400);
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@font-face { 
+  font-family: glacial; src: url('../glacial-indifference.ttf'); 
+} 
+
+@font-face { 
+  font-family: glacial-bold; src: url('../glacial-bold.otf'); 
+} 
+
+html{
+  scroll-behavior:smooth;
+  overflow-x: hidden;
+}
+
+
+body {
+    font-family: glacial, sans-serif;
+    text-align: center;
+    color: white;
+    padding-left: 20%;
+    padding-right: 20%;
+    background-color: #060606;
+  }
+  
+  h1, h2 {
+    margin-top: 50px;
+  }
+  
+  h1 {
+    font-size: 32px;
+    font-family: glacial-bold;
+    color: white;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-family: glacial-bold;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 16px;
+    line-height: 2;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyso - Reset Password</title>
+    <link rel="stylesheet" href="static/assets/login.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<!--<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>-->
+
+	<meta name="google-signin-client_id" content="498590132356-nja2j6psf36pvn83r1f79svart8ci13t.apps.googleusercontent.com">
+    
+</head>
+
+<body>
+    {% if error %}
+    <div class="alert">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      Check your username and try again!
+    </div>
+    {% endif %}
+    {% for message in get_flashed_messages() %}
+    <div class="alert-green">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <li style="list-style: none; margin: 2%;"><a class="nav-link" href="/"><img src="static/assets/logo.png" alt="TYSO" width="50"></a></li>
+    <div>
+        <h1 style="font-family: glacial-bold; text-align: center; margin-top: 5%; margin-bottom: 5%;">Reset Password</h1>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.username }}
+            {% for error in form.username.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+            {{ form.email }}
+            {% for error in form.email.errors %}
+                <span style="color: #ff4433; text-align: center; margin-bottom: 5%;">{{ error }}</span>
+            {% endfor %}
+            {{ form.submit }}
+        </form>
+    </div>
+
+    <style>
+        .alert {
+          opacity: 1;
+          transition: opacity 0.6s; /* 600ms to fade out */
+        }
+        </style>
+        
+        <script>
+        // Get all elements with class="closebtn"
+        var close = document.getElementsByClassName("closebtn");
+        var i;
+        
+        // Loop through all close buttons
+        for (i = 0; i < close.length; i++) {
+          // When someone clicks on a close button
+          close[i].onclick = function(){
+        
+            // Get the parent of <span class="closebtn"> (<div class="alert">)
+            var div = this.parentElement;
+        
+            // Set the opacity of div to 0 (transparent)
+            div.style.opacity = "0";
+        
+            // Hide the div after 600ms (the same amount of milliseconds it takes to fade out)
+            setTimeout(function(){ div.style.display = "none"; }, 600);
+          }
+        }
+        </script>
+</body>
+</html>

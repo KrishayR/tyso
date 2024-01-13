@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tysofit - Workout Summary</title>
+    <link rel="stylesheet" href="../static/assets/workoutsummary.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-7mWkK1/lp0aN+q3b5J5Y5ZlR0NULPQ+Gh0N30OQoL6ZOw+1Jdzkc1ujmxDJY8IF6XoU6X4Uy/8A0pV7rsgdFw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://kit.fontawesome.com/a30f9b8509.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@descope/web-component@latest/dist/index.js"></script>
+    <script src="https://unpkg.com/@descope/web-js-sdk@1.3.3/dist/index.umd.js"></script>
+    <style>
+        .comment-box {
+
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 0px solid rgb(255, 255, 255);
+            border-radius: 40px;
+            font-size: 16px;
+            text-align: center;
+            color: #fff;
+            background: -webkit-linear-gradient(left, #FA6045, #9F1D11);
+            width: 100%;
+        }
+
+        input[type="text"]::placeholder {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <script src="{{url_for('static', filename='descope.js')}}"></script>
+    <script>
+
+
+        if (sessionToken) {
+            getProfile()
+        } else if (validRefreshToken && !sessionToken) {
+            sdk.refresh()
+        } else {
+            window.location.href = "/login"
+        }
+
+        
+        async function getProfile() {
+            const profile = await sdk.me()
+            userName.innerHTML = profile.data.name
+            userEmail.innerHTML = profile.data.email
+        }
+
+
+        async function logout() {
+            await sdk.logout()
+            window.location.href = "/login"
+        }
+    </script>
+    <div class="weheader">
+        <a href="/"><img src="static/assets/logo.png" alt="TYSO" width="50"></a>
+        <h1>Workout Summary</h1>
+        <br><br>
+        <h2 style="color: white; margin-top: 2%;  margin-left: 30%;">Activity</h2>
+        <div class="container">
+            <div class="workout-box" id="workoutinfo">
+                <ul>
+                    <li>Exercise 1 - 10 reps</li>
+                    <li>Exercise 2 - 12 reps</li>
+                    <li>Exercise 3 - 8 reps</li>
+                    <li>Total Time Elapsed - 45 minutes</li>
+                </ul>
+            </div>
+			<br>
+			<div class="comment-box" >
+				<input type="text" id="comment" name="comment" placeholder="Write about your workout... How do you feel?">
+			</div>
+			<!-- <div class="image-upload">
+				<label for="image-input">
+					<i style="background: -webkit-linear-gradient(left, #FA6045, #9F1D11);
+					-webkit-background-clip: text;
+					background-clip: text;
+					-webkit-text-fill-color: transparent; font-size: 100px; padding: 30px;" class="fa fa-upload"></i>
+				</label>
+				<input id="image-input" type="file" accept="image/*">
+			</div>
+			 -->
+			 <br>
+			 <div class="next-button-container">
+		
+				<a href="javascript:sendData()" id="nextButton" class="premium-button" style="text-decoration: none;">Finish</a>
+			  </div>
+        </div>
+    </div>
+	<script>
+let exerciseHTML = '';
+for (let i = 0; i < localStorage.length; i++) {
+  const key = localStorage.key(i);
+  if (key.endsWith('count')) {
+    const count = localStorage.getItem(key);
+    const exerciseName = key.replace('-count', '').replace(/^\//, '');
+    const exerciseHTMLFragment = `<li>${exerciseName} - ${count} reps</li>`;
+    exerciseHTML += exerciseHTMLFragment;
+  }
+}
+const elapsedTime = localStorage.getItem('elapsedTime');
+exerciseHTML += `<li>Total Time Elapsed - ${elapsedTime}</li>`; // add the total time elapsed to the end of the list
+document.getElementById('workoutinfo').innerHTML = `<ul>${exerciseHTML}</ul>`; // set the innerHTML of the workoutinfo div to the HTML string
+	</script>
+
+    <script>
+        function sendData() {
+            // Get the workout information and comment from the DOM
+            localStorage.removeItem('elapsedTime');
+            localStorage.removeItem('workoutInfo');
+            localStorage.removeItem('comment');
+            localStorage.removeItem('startTime');
+            localStorage.removeItem('endTime');
+            for (let key in localStorage) {
+  if (key.endsWith("count")) {
+    localStorage.removeItem(key);
+  }
+}
+
+
+			// localStorage.clear() // This will not work because the login info is stored in the client side right so it will log you out
+            // Get the workout information and comment from the DOM
+            const workoutInfo = document.getElementById('workoutinfo').innerHTML;
+            const comment = document.getElementById('comment').value;
+    
+            // Store the data in localStorage
+            localStorage.setItem('workoutInfo', workoutInfo);
+            localStorage.setItem('comment', comment);
+
+            const currentDate = new Date();
+            const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+            };
+            const time = currentDate.toLocaleString(undefined, options);
+            console.log(time);
+
+
+    
+            // Send the data to the backend using AJAX
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/getworkoutdata', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // console.log(xhr.responseText);
+                }
+            };
+            const data = {
+                'workoutInfo': workoutInfo,
+                'comment': comment
+            };
+            xhr.send(JSON.stringify(data));
+    
+
+            // Redirect to the progress page
+			// window.location.href = '/progress';
+        }
+    </script>
+    
+	
+</body>
+</html>

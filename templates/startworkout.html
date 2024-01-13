@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tysofit - Pre workout</title>
+  <script src="https://unpkg.com/@descope/web-component@latest/dist/index.js"></script>
+  <script src="https://unpkg.com/@descope/web-js-sdk@1.3.3/dist/index.umd.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/assets/startworkout.css">
+</head>
+<body>
+  <script src="{{url_for('static', filename='descope.js')}}"></script>
+  <script>
+
+
+      if (sessionToken) {
+          getProfile()
+      } else if (validRefreshToken && !sessionToken) {
+          sdk.refresh()
+      } else {
+          window.location.href = "/login"
+      }
+
+      
+      async function getProfile() {
+          const profile = await sdk.me()
+          userName.innerHTML = profile.data.name
+          userEmail.innerHTML = profile.data.email
+      }
+
+
+      async function logout() {
+          await sdk.logout()
+          window.location.href = "/login"
+      }
+  </script>
+    <div class="header">
+      <a href="/"><img src="static/assets/logo.png" alt="TYSO" width="50"></a>
+      <nav>
+          <!-- <a href="#">Insights</a> -->
+          <a href="/progress">Progress</a>
+          <!-- <a href="#">Settings</a> -->
+          <a id="premium" href="https://www.buymeacoffee.com/tyso">Donate</a>
+          <a style="color: #ff4433" class="link logout" href="javascript:logout();">Logout</a>
+      </nav>
+  </div>
+    <div class="content">
+        <h1>Before you begin... </h1>
+    </div>
+    <h4 style="text-align: center;">Select the exercises in your workout, in order</h4>
+    <div class="button-container">
+        <div class="button" onclick="buttonClicked('Bicep Curls')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Bicep Curls</div>
+            </div>
+          </div>
+        </div>
+        <div class="button" onclick="buttonClicked('Tricep Extensions')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Tricep Extensions</div>
+            </div>
+          </div>
+        </div>
+        <div class="button" onclick="buttonClicked('Shoulder Press')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Shoulder Press</div>
+            </div>
+          </div>
+        </div>
+        <div class="button" onclick="buttonClicked('Lateral Raises')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Lateral Raises</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="button-container">
+        <div class="button" onclick="buttonClicked('Front Raises')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Front Raises</div>
+            </div>
+          </div>
+        </div>
+        <div class="button" onclick="buttonClicked('Squats')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Squats</div>
+            </div>
+          </div>
+        </div>
+        <div class="button" onclick="buttonClicked('Deadlifts')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Deadlifts</div>
+            </div>
+          </div>
+        </div>
+        <div class="button" onclick="buttonClicked('Push Ups')">
+          <div class="circle1">
+            <div class="circle2">
+              <div class="text">Push Ups</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; background: -webkit-linear-gradient(left, #FA6045, #9F1D11);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;" id="output"></div>
+      <br>
+      <div class="next-button-container">
+        <a href="javascript:sendData()" id="nextButton" class="premium-button" style="display: none; text-decoration: none;">Next</a>
+      </div>
+      
+
+      <script>
+        const buttons = document.querySelectorAll('.button');
+
+        buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            button.classList.toggle('active');
+        });
+        });
+
+      </script>
+      <script>
+        var clickedButtons = [];
+
+        function buttonClicked(buttonText) {
+        var index = clickedButtons.indexOf(buttonText);
+        if (index > -1) {
+            clickedButtons.splice(index, 1);
+        } else {
+            clickedButtons.push(buttonText);
+        }
+        updateOutput();
+        }
+
+        function updateOutput() {
+            var output = "";
+            var nextButton = document.getElementById("nextButton");
+
+            if (clickedButtons.length > 0) {
+                output += "Exercises: ";
+                for (var i = 0; i < clickedButtons.length; i++) {
+                    output += clickedButtons[i];
+                    if (i < clickedButtons.length - 1) {
+                        output += ", ";
+                    }
+                }
+                nextButton.style.display = "block";
+            } else {
+                nextButton.style.display = "none";
+            }
+            document.getElementById("output").innerHTML = output;
+        }
+
+        function sendData(){
+            var output2 = document.getElementById("output").textContent;
+            // console.log(output2)
+            url = 'http://127.0.0.1:5000/weight?name=' + encodeURIComponent(output2);
+            document.location.href = url;
+        }
+
+
+      </script>
+      
+    
+</body>
+</html>

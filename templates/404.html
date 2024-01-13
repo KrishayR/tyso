@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tysofit - 404</title>
+    <link rel="stylesheet" href="static/assets/login.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<!--<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>-->
+
+	<meta name="google-signin-client_id" content="498590132356-nja2j6psf36pvn83r1f79svart8ci13t.apps.googleusercontent.com">
+    
+</head>
+
+<body>
+    <li style="list-style: none; margin: 2%;"><a class="nav-link" href="/"><img src="static/assets/logo.png" alt="TYSO" width="50"></a></li>
+    <img style="position: absolute; z-index: -10000000;" src="static/assets/dashdesign.png" alt="">
+    <img style="position: absolute; z-index: -10000000; right:0;  -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);" src="static/assets/dashdesign.png" alt="">
+    <div>
+        <h5 style="font-family: glacial; text-align: center; margin-top: 5%; margin-bottom: 5%; font-size: 300px; color: white;">4 0 4</h5>
+        <P id="jokes" style="font-family: glacial; text-align: center; margin-top: 5%; margin-bottom: 5%; font-size: 50px;     background: -webkit-linear-gradient(left, #FA6045, #9F1D11);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;"></P>
+    </div>
+
+    <style>
+        .alert {
+          opacity: 1;
+          transition: opacity 0.6s; /* 600ms to fade out */
+        }
+        </style>
+        
+        <script>
+            (function joke() {
+            var jokes = ["Looks like you took a wrong turn on your fitness journey", 
+                            "Sorry, we couldn't find the page you were lifting for",
+                            "404 - Looks like you need to stretch and try again",
+                            "Your gains were too big for our server to handle!",
+                            "Looks like you've lost your way to gains-ville. Let's redirect you",
+"This page is as elusive as your six-pack. Keep searching, you'll find it",
+"We can't spot you right now, but we're working on getting this page up and running again",
+"404 - Not all gains come easy. Keep lifting, and try again later"
+
+                        ];
+            var randomjoke = Math.floor(Math.random() * jokes.length);
+            document.getElementById('jokes').innerHTML = jokes[randomjoke];
+            })();
+        </script>
+
+</body>
+</html>

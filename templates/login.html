@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In to Tysofit - Access Your Account</title>
+    <link rel="stylesheet" href="static/assets/login.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="description" content="Log in to Tysofit and access your account.">
+    <script src="https://unpkg.com/@descope/web-component@latest/dist/index.js"></script>
+    <script src="https://unpkg.com/@descope/web-js-sdk@1.3.3/dist/index.umd.js"></script>
+
+
+	<!--<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>-->
+
+</head>
+
+<body>
+  <h1 style="font-family: glacial-bold; text-align: center; margin-top: 5%; margin-bottom: 5%;">Log In</h1>
+  <div id="container"></div>
+
+  <script src="../static/descope.js"></script> 
+  <script>
+      const container = document.getElementById('container')
+     
+
+      if (!validRefreshToken) { 
+          container.innerHTML = '<descope-wc project-id="' + projectId + '" flow-id="sign-in" theme="dark"></descope-wc>'
+          const wcElement = document.getElementsByTagName('descope-wc')[0]
+
+
+          const onSuccess = (e) => {
+              fetch("/login", {
+                  method: "POST",
+                  headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + e.detail.sessionJwt
+                  }
+              })
+              .then(data => {
+                  return data.json()
+              }).then(jsonData => {
+                  console.log(jsonData)
+                  window.location.href = "/dashboard"
+              });
+          }
+
+
+          const onError = (err) => console.log(err);
+
+          wcElement.addEventListener('success', onSuccess)
+          wcElement.addEventListener('error', onError)
+      } else {
+          // will check if client has valid refresh token in /profile and autoRefresh if possible 
+          window.location.href = "/dashboard"
+      }
+  </script>
+</body>
+</html>
