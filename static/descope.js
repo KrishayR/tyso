@@ -1,4 +1,4 @@
-const projectId = "P2QCGhyesv6kk1BL2RGvh063o2gF"
+const projectId = "Use Own ID from descope"
 const sdk = Descope({ projectId: projectId, persistTokens: true, autoRefresh: true })
 
 const sessionToken = sdk.getSessionToken()
